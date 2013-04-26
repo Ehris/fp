@@ -13,11 +13,8 @@ take(N, Lazy) ->
     end.
 
 zipWith(F, Lazy1, Lazy2) ->
-  %[F(hd(Lazy1()), hd(Lazy2())) | zipWith(F, tl(Lazy1()), tl(Lazy2()))].
   fun() ->
-    [X | L1] = Lazy1(),
-    [Y | L2] = Lazy2(),
-    [F(X,Y) | zipWith(F, L1, L2)]
+    [F(hd(Lazy1()), hd(Lazy2())) | zipWith(F, tl(Lazy1()), tl(Lazy2()))]
   end.
 
 fibs(N) ->
