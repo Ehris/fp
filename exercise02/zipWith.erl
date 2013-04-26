@@ -20,4 +20,4 @@ zipWith(F, Lazy1, Lazy2) ->
 fibs(N) ->
   take(N, fun() -> [0 | fun() -> [1 | zipWith(fun(X, Y) -> X + Y end, fibgen(0, 1), fibgen(1, 1))] end] end).
 
-%% $ zipWith:fibs(10). => [0,1,1,2,3,5,8,13,21,34]
+% $ zipWith:fibs(10). => [0,1,1,2,3,5,8,13,21,34]
