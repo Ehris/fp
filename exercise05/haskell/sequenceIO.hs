@@ -4,7 +4,7 @@ accumulateIO [] = do
 accumulateIO (x:xs) = do
   result <- x
   list <- accumulateIO xs
-  return (result:list)a
+  return (result:list)
 
 -- *Main> accumulateIO [getLine, getLine]
 -- foo

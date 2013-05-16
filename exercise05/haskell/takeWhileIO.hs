@@ -7,7 +7,7 @@ takeWhileIO pred oper = do
   else
     do
       c <- takeWhileIO pred oper
-      tareturn (a:c)
+      return (a:c)
 
 -- *Main> takeWhileIO (\x -> if x == "exit" then False else True) getLine
 -- foo
