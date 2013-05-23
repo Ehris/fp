@@ -1,0 +1,64 @@
+instance Monad Maybe where
+   Just x >>= k = k x      (I)
+   Nothing >>= k = Nothing (II)
+   return = Just           (III)
+   fail s = Nothing
+
+M1: return >@> f = f
+M2: f >@> return = f
+M3: (f >@> g) >@> h = f >@> (g >@> h)
+
+(>@>) :: Monad m => (a -> m b) -> (b -> m c) -> (a -> m c)
+f >@> g = \x -> (f x) >>= g (IV)
+
+M1:
+return >@> f           = f
+\x -> (return x) >>= f = f   (IV)
+\x -> (Just x) >>= f   = f   (III)
+Just >>= f             = f
+Just x >>= f           = f x (I)
+f x                    = f x
+
+M2:
+f >@> return           = f
+\x -> (f x) >>= return = f   (IV)
+\x -> (f x) >>= Just   = f   (III)
+f >>= Just             = f
+f x >>= Just           = f x
+
+--- I
+Just y >>= Just        = f x
+Just y                 = f x
+f x                    = f x
+
+--- II
+Nothing >>= Just       = f x
+Nothing                = f x
+f x                    = f x
+
+M3:
+(f >@> g) >@> h                     = f >@> (g >@> h)
+\x -> ((f >@> g) x) >>= h           = f >@> (g >@> h) (IV)
+\x -> ((\y -> (f y) >>= g) x) >>= h = f >@> (g >@> h) (IV)
+((\y -> (f y) >>= g) >>= h          = f >@> (g >@> h)
+(f >>= g) >>= h                     = f >@> (g >@> h)
+(f x >>= g) >>= h                   = (f >@> (g >@> h)) x
+
+--- I
+(Just a >>= g) >>= h                = (f >@> (g >@> h)) x
+g a >>= h                           = (f >@> (g >@> h)) x
+(Just b) >>= (g >>= h)              = (f >@> (g >@> h)) x
+f x >>= (g >>= h)                   = (f >@> (g >@> h)) x
+f >>= (g >>= h)                     = f >@> (g >@> h)
+(f x) >>= (\y -> (g y) >>= h)       = f >@> (g >@> h)
+\x -> (f x) >>= (\y -> (g y) >>= h) = f >@> (g >@> h)
+f >@> (g >@> h)                     = f >@> (g >@> h)
+
+--- II
+(Nothing >>= g) >>= h               = (f >@> (g >@> h)) x
+Nothing
+Nothing >>= (g >>= h)
+f x >>= (\y -> (g y) >>= h)
+\x -> (f x) >>= (\y -> (g y) >>= h)
+f >@> (g >@> h)                     = f >@> (g >@> h)
+

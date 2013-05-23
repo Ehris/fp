@@ -1,0 +1,28 @@
+a)
+foldl step zero [1, 2]
+= foldl step (step zero 1) [2]
+= foldl step (step (step zero 1) 2) []
+= (step (step zero 1) 2)
+
+altfl step zero [1, 2]
+= (foldr st id [1, 2]) zero
+    where st x g a = g (step a x)
+= st 1 (foldr st id [2]) zero
+    where st x g a = g (step a x)
+= st 1 (st 2 (foldr st id [])) zero
+    where st x g a = g (step a x)
+= st 1 (st 2 id) zero
+  where st x g a = g (step a x)
+= st 1 (id (step ? 2)) zero
+  where st x g a = g (step a x)
+= (id (step ? 2)) (step ? 1) zero
+= (id (step ? 2)) (step zero 1)
+= (id (step (step zero 1) 2))
+= (step (step zero 1) 2)
+
+b)
+IA: xs = []
+foldl step zero [] = zero
+altfl step zero [] = (id) zero = zero
+
+...
